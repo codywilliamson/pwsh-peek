@@ -5,8 +5,8 @@
     Author            = 'Cody Williamson (cody@spectaclesoftware.com)'
     CompanyName       = 'Spectacle Software'
     Copyright         = '(c) Cody Williamson 2025'
-    Description       = 'Modern, concise directory listing with human sizes and relative times; provides alias `peek`.'
-    PowerShellVersion = '5.1'
+    Description       = 'Modern, concise directory listing with human sizes and relative times; provides alias `peek`. Requires PowerShell 7+ and a terminal/font that supports color emoji for icons.'
+    PowerShellVersion = '7.0'
     FunctionsToExport = @(
         'Get-DirectoryView',
         'Get-PeekAll',
@@ -14,7 +14,9 @@
         'Get-PeekFiles',
         'Get-PeekDirs',
         'Get-PeekAllSize',
-        'Get-PeekAllNewest'
+        'Get-PeekAllNewest',
+        'Get-PeekPreference',
+        'Set-NoIconsForPeek'
     )
     AliasesToExport   = @(
         'peek',
@@ -28,5 +30,5 @@
     )
     CmdletsToExport   = @()
     VariablesToExport = @()
-    PrivateData       = @{ PSData = @{ Tags = @('listing', 'gci', 'ls', 'peek'); ProjectUri = ''; } }
+    PrivateData       = @{ PSData = @{ Tags = @('listing', 'gci', 'ls', 'peek'); ProjectUri = 'https://github.com/codywilliamson/pwsh-peek'; } }
 }

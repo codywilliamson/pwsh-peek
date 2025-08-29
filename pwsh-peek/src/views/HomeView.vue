@@ -38,7 +38,7 @@ const features = [
     description: 'Optimized PowerShell cmdlets that respond instantly, even in large directories.'
   },
   {
-  icon: '�',
+  icon: '📖',
     title: 'Human Readable',
     description: 'File sizes in KB/MB/GB and relative timestamps like "5m ago" or "2d ago".'
   },
@@ -53,7 +53,7 @@ const features = [
     description: 'Short, memorable commands like "peek-all", "peek-files", or just "pka".'
   },
   {
-  icon: '�',
+  icon: '🎨',
     title: 'Rich Display',
     description: 'Colorized output with file type icons and clean, organized formatting.'
   },
@@ -186,6 +186,7 @@ const flags = [
   { name: '-SortNewest', desc: 'Sort by LastWriteTime (newest first)' },
   { name: '-SortSize', desc: 'Sort by size (largest first)' },
   { name: '-Long', desc: 'Show extended columns (Mode, FullName)' },
+  { name: '-NoIcons', desc: 'ASCII-only icons (alias: -Ascii) for environments without emoji support' },
 ]
 
 const copyInstallCommand = async () => {

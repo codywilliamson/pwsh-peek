@@ -10,6 +10,10 @@
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         <div class="section-glow rounded-lg p-4">
+          <h3 class="text-sm font-semibold text-emerald-400 mb-2">Emoji/icons not showing?</h3>
+          <p class="text-sm text-gray-300">Use PowerShell 7+ in Windows Terminal and a font with color emoji (e.g., Segoe UI Emoji). Optional: install <code class="font-mono text-emerald-300">Terminal-Icons</code> for ls/dir; peek already includes basic icons. Fallbacks: add <code class="font-mono text-emerald-300">-NoIcons</code> (alias <code class="font-mono text-emerald-300">-Ascii</code>) or set it globally with <code class="font-mono text-emerald-300">Set-NoIconsForPeek</code>.</p>
+        </div>
+        <div class="section-glow rounded-lg p-4">
           <h3 class="text-sm font-semibold text-emerald-400 mb-2">Aliases included</h3>
           <p class="text-sm text-gray-300">Aliases like <code class="font-mono text-emerald-300">pka</code> or <code class="font-mono text-emerald-300">pkf</code> are shown alongside each command in the list.</p>
         </div>

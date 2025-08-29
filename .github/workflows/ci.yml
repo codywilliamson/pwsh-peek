@@ -27,13 +27,16 @@ jobs:
             - run: pnpm build
 
     test-module:
-        name: Lint module (basic)
+        name: Module tests (Pester)
         runs-on: windows-latest
         steps:
             - uses: actions/checkout@v4
-            - name: Import module and run basic command
+            - name: Install Pester
+              shell: pwsh
+              run: |
+                  Install-Module Pester -Force -Scope CurrentUser -MinimumVersion 5.5.0
+            - name: Run tests
               shell: pwsh
               run: |
                   $env:PSModulePath = "$((Get-Location).Path);$env:PSModulePath"
-                  Import-Module ./DirectoryListing.psd1 -Force
-                  Get-DirectoryView | Out-Null
+                  Invoke-Pester -CI -Output Detailed

@@ -22,6 +22,11 @@ $GitHubRepo = "codywilliamson/pwsh-peek"
 Write-Host "🔧 Installing peek PowerShell Module..." -ForegroundColor Cyan
 Write-Host ""
 
+# Basic environment checks
+if ($PSVersionTable.PSVersion.Major -lt 7) {
+    Write-Host "⚠️  PowerShell 7+ recommended. You're on $($PSVersionTable.PSVersion). The module works, but emoji icons may not render in Windows PowerShell 5.1." -ForegroundColor Yellow
+}
+
 # Ensure TLS 1.2+ for GitHub
 try {
     $proto = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
@@ -135,6 +140,12 @@ if ($AddToProfile) {
 
 Write-Host ""
 Write-Host "🎉 Installation complete!" -ForegroundColor Green
+Write-Host ""
+Write-Host "ℹ️  Tip: If icons look like empty boxes, switch to PowerShell 7+ in Windows Terminal and a font with color emoji (e.g., Segoe UI Emoji)." -ForegroundColor DarkGray
+Write-Host "     Optional: Install 'Terminal-Icons' for nicer ls/dir output (peek already includes basic icons)." -ForegroundColor DarkGray
+Write-Host "     Fallback: Use 'peek -NoIcons' (alias: -Ascii) or make it default with 'Set-NoIconsForPeek -Scope User'." -ForegroundColor DarkGray
+Write-Host "     Revert later with 'Set-NoIconsForPeek -Off -Scope User'." -ForegroundColor DarkGray
+Write-Host "     For paging, prefer 'Out-Host -Paging' instead of 'more' to avoid Unicode issues." -ForegroundColor DarkGray
 Write-Host ""
 Write-Host "Try these commands:" -ForegroundColor White
 Write-Host "  peek              # Basic directory listing" -ForegroundColor Cyan

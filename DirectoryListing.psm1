@@ -92,8 +92,16 @@ function Get-DirectoryView {
         [switch]$SortNewest,
         [switch]$SortSize,
         [switch]$OnlyFiles,
-        [switch]$OnlyDirs
+        [switch]$OnlyDirs,
+        [Alias('Ascii')]
+        [switch]$NoIcons
     )
+
+    # If caller didn't specify -NoIcons, honor environment or config preference
+    if (-not $PSBoundParameters.ContainsKey('NoIcons')) {
+        $pref = Get-PeekPreference
+        if ($pref.NoIcons) { $NoIcons = $true }
+    }
 
     # Build Get-ChildItem parameters
     $gciParams = @{ Path = $Path; ErrorAction = 'SilentlyContinue' }
@@ -134,7 +142,12 @@ function Get-DirectoryView {
     $out = foreach ($it in $items) {
         $isDir = $it.PSIsContainer
         $type = if ($isDir) { 'Dir' } elseif ($it.LinkType) { 'Link' } else { 'File' }
-        $icon = if ($isDir) { '📁' } elseif ($it.LinkType) { '🔗' } else { '📄' }
+        if ($NoIcons) {
+            $icon = if ($isDir) { 'D' } elseif ($it.LinkType) { 'L' } else { 'F' }
+        }
+        else {
+            $icon = if ($isDir) { '📁' } elseif ($it.LinkType) { '🔗' } else { '📄' }
+        }
         $size = if ($isDir) { '-' } else { Convert-ToHumanSize -Bytes ($it.Length) }
         $when = Convert-ToRelativeTime -DateTime $it.LastWriteTime
 
@@ -164,9 +177,11 @@ function Get-PeekAll {
     param(
         [string]$Path = '.',
         [switch]$DirsFirst,
-        [switch]$Long
+        [switch]$Long,
+        [Alias('Ascii')]
+        [switch]$NoIcons
     )
-    Get-DirectoryView -Path $Path -All -DirsFirst:$DirsFirst -Long:$Long
+    Get-DirectoryView -Path $Path -All -DirsFirst:$DirsFirst -Long:$Long -NoIcons:$NoIcons
 }
 
 function Get-PeekAllRecurse {
@@ -175,9 +190,11 @@ function Get-PeekAllRecurse {
         [string]$Path = '.',
         [int]$Depth = 1,
         [switch]$DirsFirst,
-        [switch]$Long
+        [switch]$Long,
+        [Alias('Ascii')]
+        [switch]$NoIcons
     )
-    Get-DirectoryView -Path $Path -All -Recurse -Depth $Depth -DirsFirst:$DirsFirst -Long:$Long
+    Get-DirectoryView -Path $Path -All -Recurse -Depth $Depth -DirsFirst:$DirsFirst -Long:$Long -NoIcons:$NoIcons
 }
 
 function Get-PeekFiles {
@@ -188,9 +205,11 @@ function Get-PeekFiles {
         [switch]$DirsFirst,
         [switch]$Long,
         [switch]$SortNewest,
-        [switch]$SortSize
+        [switch]$SortSize,
+        [Alias('Ascii')]
+        [switch]$NoIcons
     )
-    Get-DirectoryView -Path $Path -OnlyFiles -All:$All -DirsFirst:$DirsFirst -Long:$Long -SortNewest:$SortNewest -SortSize:$SortSize
+    Get-DirectoryView -Path $Path -OnlyFiles -All:$All -DirsFirst:$DirsFirst -Long:$Long -SortNewest:$SortNewest -SortSize:$SortSize -NoIcons:$NoIcons
 }
 
 function Get-PeekDirs {
@@ -201,9 +220,11 @@ function Get-PeekDirs {
         [switch]$DirsFirst,
         [switch]$Long,
         [switch]$SortNewest,
-        [switch]$SortSize
+        [switch]$SortSize,
+        [Alias('Ascii')]
+        [switch]$NoIcons
     )
-    Get-DirectoryView -Path $Path -OnlyDirs -All:$All -DirsFirst:$DirsFirst -Long:$Long -SortNewest:$SortNewest -SortSize:$SortSize
+    Get-DirectoryView -Path $Path -OnlyDirs -All:$All -DirsFirst:$DirsFirst -Long:$Long -SortNewest:$SortNewest -SortSize:$SortSize -NoIcons:$NoIcons
 }
 
 function Get-PeekAllSize {
@@ -211,9 +232,11 @@ function Get-PeekAllSize {
     param(
         [string]$Path = '.',
         [switch]$DirsFirst,
-        [switch]$Long
+        [switch]$Long,
+        [Alias('Ascii')]
+        [switch]$NoIcons
     )
-    Get-DirectoryView -Path $Path -All -SortSize -DirsFirst:$DirsFirst -Long:$Long
+    Get-DirectoryView -Path $Path -All -SortSize -DirsFirst:$DirsFirst -Long:$Long -NoIcons:$NoIcons
 }
 
 function Get-PeekAllNewest {
@@ -221,9 +244,11 @@ function Get-PeekAllNewest {
     param(
         [string]$Path = '.',
         [switch]$DirsFirst,
-        [switch]$Long
+        [switch]$Long,
+        [Alias('Ascii')]
+        [switch]$NoIcons
     )
-    Get-DirectoryView -Path $Path -All -SortNewest -DirsFirst:$DirsFirst -Long:$Long
+    Get-DirectoryView -Path $Path -All -SortNewest -DirsFirst:$DirsFirst -Long:$Long -NoIcons:$NoIcons
 }
 
 # Aliases (readable plus short forms)
@@ -244,3 +269,76 @@ Set-Alias -Name pkas -Value Get-PeekAllSize
 Set-Alias -Name pkan -Value Get-PeekAllNewest
 
 Export-ModuleMember -Function Get-DirectoryView, Get-PeekAll, Get-PeekAllRecurse, Get-PeekFiles, Get-PeekDirs, Get-PeekAllSize, Get-PeekAllNewest -Alias peek, 'peek-all', 'peek-all-recurse', 'peek-files', 'peek-dirs', 'peek-all-size', 'peek-all-newest', pka, pkar, pkf, pkd, pkas, pkan
+
+# ---- Preferences & configuration helpers ----
+
+function Get-PeekConfigPath {
+    $appData = $env:APPDATA
+    if ($appData) {
+        return Join-Path $appData 'DirectoryListing/config.json'
+    }
+    # Fallback to ~/.config
+    $cfgHome = Join-Path $HOME '.config/DirectoryListing/config.json'
+    return $cfgHome
+}
+
+function Get-PeekPreference {
+    [CmdletBinding()]
+    param()
+    $noIcons = $false
+    $source = 'Default'
+
+    if ($env:PEEK_NO_ICONS) {
+        $noIcons = ($env:PEEK_NO_ICONS -ne '0')
+        $source = 'Env'
+    }
+    else {
+        try {
+            $cfgPath = Get-PeekConfigPath
+            if (Test-Path $cfgPath) {
+                $json = Get-Content -Path $cfgPath -Raw -ErrorAction Stop | ConvertFrom-Json
+                if ($null -ne $json.NoIcons) {
+                    $noIcons = [bool]$json.NoIcons
+                    $source = 'Config'
+                }
+            }
+        }
+        catch { }
+    }
+    [PSCustomObject]@{ NoIcons = $noIcons; Source = $source }
+}
+
+function Set-NoIconsForPeek {
+    [CmdletBinding(SupportsShouldProcess = $true)]
+    param(
+        [switch]$Off,
+        [ValidateSet('Process', 'User', 'Config')]
+        [string]$Scope = 'Process'
+    )
+
+    $enable = -not $Off
+
+    switch ($Scope) {
+        'Process' {
+            if ($PSCmdlet.ShouldProcess("Process env", ($enable ? 'Enable' : 'Disable'))) {
+                if ($enable) { $env:PEEK_NO_ICONS = '1' } else { Remove-Item Env:\PEEK_NO_ICONS -ErrorAction SilentlyContinue }
+            }
+        }
+        'User' {
+            if ($PSCmdlet.ShouldProcess("User env", ($enable ? 'Enable' : 'Disable'))) {
+                [Environment]::SetEnvironmentVariable('PEEK_NO_ICONS', ($enable ? '1' : $null), 'User') | Out-Null
+            }
+        }
+        'Config' {
+            if ($PSCmdlet.ShouldProcess("Config file", ($enable ? 'Enable' : 'Disable'))) {
+                $cfgPath = Get-PeekConfigPath
+                $dir = Split-Path $cfgPath -Parent
+                if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+                $obj = @{ NoIcons = $enable }
+                $obj | ConvertTo-Json -Depth 4 | Set-Content -Path $cfgPath -Encoding UTF8
+            }
+        }
+    }
+}
+
+Export-ModuleMember -Function Get-PeekPreference, Set-NoIconsForPeek -Alias

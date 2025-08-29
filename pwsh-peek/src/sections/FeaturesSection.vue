@@ -8,6 +8,9 @@
         <p class="text-xl text-gray-300 max-w-3xl mx-auto">
           Transform your PowerShell experience with modern directory listing that actually makes sense
         </p>
+        <p class="text-sm text-gray-400 mt-2 max-w-3xl mx-auto">
+          Note: Icons use emoji. For best results, use PowerShell 7+ in Windows Terminal with a font that supports color emoji.
+        </p>
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
