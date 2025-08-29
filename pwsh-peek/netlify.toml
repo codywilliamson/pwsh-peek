@@ -7,10 +7,11 @@
   NODE_VERSION = "20.19.0"
   PNPM_VERSION = "8.6.0"
 
+# Serve the local installer from /public
 [[redirects]]
   from = "/install.ps1"
-  to = "https://raw.githubusercontent.com/codywilliamson/pwsh-profile-personal/main/scripts/Settings/modules/DirectoryListing/install.ps1"
-  status = 302
+  to = "/install.ps1"
+  status = 200
 
 [[redirects]]
   from = "/*"
@@ -53,7 +54,7 @@
 # Custom domain (if you have one)
 # [[redirects]]
 #   from = "https://peek-powershell.netlify.app/*"
-#   to = "https://peek.pwsh.dev/:splat"
+#   to = "https://pwsh-peek.netlify.app/:splat"
 #   status = 301
 #   force = true
 

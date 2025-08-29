@@ -1,9 +1,14 @@
 # peek PowerShell Module Installer
-# This script downloads and installs the peek module for enhanced directory listing
+<#
+Downloads and installs the DirectoryListing (peek) module from this repository's root.
+Designed to be fetched via: iex (irm https://pwsh-peek.netlify.app/install.ps1)
+This script assumes the module files (psd1, psm1) live in the repo root (not nested paths).
+#>
 
 [CmdletBinding()]
 param(
     [string]$InstallPath = "$HOME\Documents\PowerShell\Modules",
+    [string]$Branch = "master",
     [switch]$Force,
     [switch]$AddToProfile
 )
@@ -13,10 +18,15 @@ $ErrorActionPreference = "Stop"
 # Module information
 $ModuleName = "DirectoryListing"
 $GitHubRepo = "codywilliamson/pwsh-peek"
-$ModuleFolder = "modules/DirectoryListing"
 
 Write-Host "🔧 Installing peek PowerShell Module..." -ForegroundColor Cyan
 Write-Host ""
+
+# Ensure TLS 1.2+ for GitHub
+try {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
+}
+catch { }
 
 # Create module directory
 $ModuleInstallPath = Join-Path $InstallPath $ModuleName
@@ -35,8 +45,8 @@ if (Test-Path $ModuleInstallPath) {
 Write-Host "📁 Creating module directory: $ModuleInstallPath" -ForegroundColor Green
 New-Item -ItemType Directory -Path $ModuleInstallPath -Force | Out-Null
 
-# Download module files
-$BaseUrl = "https://raw.githubusercontent.com/$GitHubRepo/master/"
+# Download module files from repo root
+$BaseUrl = "https://raw.githubusercontent.com/$GitHubRepo/$Branch"
 $Files = @(
     "DirectoryListing.psd1",
     "DirectoryListing.psm1",
@@ -48,17 +58,28 @@ Write-Host "⬇️  Downloading module files..." -ForegroundColor Green
 foreach ($File in $Files) {
     $Url = "$BaseUrl/$File"
     $Destination = Join-Path $ModuleInstallPath $File
-    
     try {
         Write-Host "   📄 $File" -ForegroundColor Gray
-        $WebClient = New-Object System.Net.WebClient
-        $WebClient.DownloadFile($Url, $Destination)
-        $WebClient.Dispose()
+        Invoke-WebRequest -Uri $Url -OutFile $Destination -UseBasicParsing -ErrorAction Stop
     }
     catch {
-        Write-Host "❌ Failed to download $File" -ForegroundColor Red
+        Write-Host "❌ Failed to download $File from $Url" -ForegroundColor Red
         Write-Host "   Error: $($_.Exception.Message)" -ForegroundColor Red
-        exit 1
+        if ($Branch -eq 'master') {
+            Write-Host "   Retrying against 'main' branch..." -ForegroundColor Yellow
+            try {
+                $fallbackUrl = "https://raw.githubusercontent.com/$GitHubRepo/main/$File"
+                Invoke-WebRequest -Uri $fallbackUrl -OutFile $Destination -UseBasicParsing -ErrorAction Stop
+                Write-Host "   ✅ Fallback succeeded for $File" -ForegroundColor Green
+            }
+            catch {
+                Write-Host "   ❌ Fallback failed for $File" -ForegroundColor Red
+                exit 1
+            }
+        }
+        else {
+            exit 1
+        }
     }
 }
 
@@ -121,7 +142,7 @@ Write-Host "  peek-dirs         # Show only directories" -ForegroundColor Cyan
 Write-Host "  pka               # Short alias for peek-all" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "For full documentation, visit:" -ForegroundColor White
-Write-Host "  https://peek.pwsh.dev" -ForegroundColor Blue
+Write-Host "  https://pwsh-peek.netlify.app" -ForegroundColor Blue
 Write-Host ""
 
 # Show a quick demo

@@ -3,7 +3,7 @@
 
 Blazing-fast, human-friendly directory listings for PowerShell with icons, human-readable sizes, relative timestamps, and intuitive aliases.
 
-Website: https://peek.pwsh.dev
+Website: https://pwsh-peek.netlify.app
 
 ## Features
 
