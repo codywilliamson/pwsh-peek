@@ -9,25 +9,26 @@ Describe 'DirectoryListing module' {
         Import-Module $psd1 -Force -ErrorAction Stop
 
         # Prepare a temporary test directory inside Pester's TestDrive (auto-cleaned)
-        $tdRoot = (Resolve-Path TestDrive:).Path
-        $global:TestDir = Join-Path $tdRoot 'peek-tests'
-        New-Item -ItemType Directory -Path $global:TestDir -Force | Out-Null
+    $tdRoot = 'TestDrive:\'
+    $global:TestDir = Join-Path $tdRoot 'peek-tests'
+    New-Item -ItemType Directory -Path $global:TestDir -Force | Out-Null
 
-        $small = Join-Path $global:TestDir 'small.bin'
-        $twoKB = Join-Path $global:TestDir 'twoKB.bin'
+    # Create files first so we can use their physical FullName with .NET APIs
+    $smallItem = New-Item -ItemType File -Path (Join-Path $global:TestDir 'small.bin') -Force
+    $twoKBItem = New-Item -ItemType File -Path (Join-Path $global:TestDir 'twoKB.bin') -Force
 
-        # Create files with exact sizes using FileStream.SetLength for determinism
-        $fs1 = [System.IO.File]::Open($small, [System.IO.FileMode]::Create, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
-        $fs1.SetLength(512)
-        $fs1.Dispose()
+    # Create files with exact sizes using FileStream.SetLength for determinism (use physical paths)
+    $fs1 = [System.IO.File]::Open($smallItem.FullName, [System.IO.FileMode]::Create, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+    $fs1.SetLength(512)
+    $fs1.Dispose()
 
-        $fs2 = [System.IO.File]::Open($twoKB, [System.IO.FileMode]::Create, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
-        $fs2.SetLength(2048)
-        $fs2.Dispose()
+    $fs2 = [System.IO.File]::Open($twoKBItem.FullName, [System.IO.FileMode]::Create, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+    $fs2.SetLength(2048)
+    $fs2.Dispose()
 
-        # Timestamps to exercise relative time
-        (Get-Item $small).LastWriteTime = (Get-Date).AddSeconds(-30)
-        (Get-Item $twoKB).LastWriteTime = (Get-Date).AddMinutes(-5)
+    # Timestamps to exercise relative time (set on physical paths)
+    (Get-Item $smallItem.FullName).LastWriteTime = (Get-Date).AddSeconds(-30)
+    (Get-Item $twoKBItem.FullName).LastWriteTime = (Get-Date).AddMinutes(-5)
     }
 
     # No explicit cleanup required; Pester removes TestDrive automatically
