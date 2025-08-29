@@ -1,0 +1,56 @@
+[build]
+  publish = "dist"
+  command = "pnpm run build"
+
+[build.environment]
+  # Match package.json engines to avoid plugin hash errors in Node 18
+  NODE_VERSION = "20.19.0"
+  PNPM_VERSION = "9.12.0"
+
+# Serve the local installer from /public
+[[redirects]]
+  from = "/install.ps1"
+  to = "/install.ps1"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[dev]
+  command = "pnpm run dev"
+  targetPort = 5173
+  port = 8888
+  autoLaunch = true
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.github.com;"
+
+# Cache static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Functions (if needed in the future)
+[functions]
+  directory = "netlify/functions"
