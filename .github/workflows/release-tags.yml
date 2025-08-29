@@ -44,6 +44,35 @@ jobs:
           echo "website_version=${WEBSITE_VERSION}" >> "$GITHUB_OUTPUT"
           echo "Detected module: ${MODULE_VERSION:-n/a}, website: ${WEBSITE_VERSION:-n/a}"
 
+      - name: Detect changed paths (last commit)
+        id: changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Default false
+          MODULE_CHANGED=false
+          WEBSITE_CHANGED=false
+          # If manual run, allow both
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            MODULE_CHANGED=true
+            WEBSITE_CHANGED=true
+          else
+            # Compare last commit
+            BASE=$(git rev-parse HEAD~1 || echo "")
+            if [[ -n "$BASE" ]]; then
+              CHANGED=$(git diff --name-only "$BASE" HEAD)
+              if echo "$CHANGED" | grep -E "^(DirectoryListing\.psd1|DirectoryListing\.psm1)$" >/dev/null; then
+                MODULE_CHANGED=true
+              fi
+              if echo "$CHANGED" | grep -E "^pwsh-peek/" >/dev/null; then
+                WEBSITE_CHANGED=true
+              fi
+            fi
+          fi
+          echo "module_changed=${MODULE_CHANGED}" >> "$GITHUB_OUTPUT"
+          echo "website_changed=${WEBSITE_CHANGED}" >> "$GITHUB_OUTPUT"
+          echo "Module changed: $MODULE_CHANGED, Website changed: $WEBSITE_CHANGED"
+
       - name: Configure git user
         run: |
           git config user.name "github-actions[bot]"
@@ -53,7 +82,7 @@ jobs:
         run: git fetch --tags --force
 
       - name: Tag module version
-        if: ${{ steps.versions.outputs.module_version != '' }}
+        if: ${{ steps.versions.outputs.module_version != '' && (steps.changed.outputs.module_changed == 'true') }}
         env:
           TAG_NAME: module-v${{ steps.versions.outputs.module_version }}
         run: |
@@ -66,7 +95,7 @@ jobs:
           fi
 
       - name: Tag website version
-        if: ${{ steps.versions.outputs.website_version != '' }}
+        if: ${{ steps.versions.outputs.website_version != '' && (steps.changed.outputs.website_changed == 'true') }}
         env:
           TAG_NAME: website-v${{ steps.versions.outputs.website_version }}
         run: |
@@ -77,3 +106,19 @@ jobs:
             git push origin "${TAG_NAME}"
             echo "Pushed tag ${TAG_NAME}"
           fi
+
+      - name: Create GitHub Release (module)
+        if: ${{ steps.versions.outputs.module_version != '' && (steps.changed.outputs.module_changed == 'true') }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: module-v${{ steps.versions.outputs.module_version }}
+          name: Module v${{ steps.versions.outputs.module_version }}
+          generate_release_notes: true
+
+      - name: Create GitHub Release (website)
+        if: ${{ steps.versions.outputs.website_version != '' && (steps.changed.outputs.website_changed == 'true') }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: website-v${{ steps.versions.outputs.website_version }}
+          name: Website v${{ steps.versions.outputs.website_version }}
+          generate_release_notes: true
