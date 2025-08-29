@@ -143,7 +143,7 @@ Write-Host "  peek-dirs         # Show only directories" -ForegroundColor Cyan
 Write-Host "  pka               # Short alias for peek-all" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "For full documentation, visit:" -ForegroundColor White
-Write-Host "  https://pwsh.peek.dev" -ForegroundColor Blue
+Write-Host "  https://peek.codywilliamson.com" -ForegroundColor Blue
 Write-Host ""
 
 # Show a quick demo

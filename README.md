@@ -29,13 +29,13 @@ Blazing-fast, human-friendly directory listings for PowerShell with icons, human
 Run in PowerShell:
 
 ```powershell
-iex (irm pwsh.peek.dev/install.ps1)
+iex (irm peek.codywilliamson.com/install.ps1)
 ```
 
 Custom path / profile:
 
 ```powershell
-iex (irm pwsh.peek.dev/install.ps1) -InstallPath "C:\MyModules" -AddToProfile
+iex "& { $(irm peek.codywilliamson.com/install.ps1) } -InstallPath 'C:\\MyModules' -AddToProfile"
 ```
 
 ## Commands

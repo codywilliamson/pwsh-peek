@@ -34,10 +34,26 @@
         <p class="text-gray-400 mb-4">
           Vibe coded with ❤️ just because I can
         </p>
-        <div class="flex justify-center space-x-6">
+        <div class="flex flex-wrap justify-center gap-3">
           <a href="https://github.com/codywilliamson/pwsh-peek" 
-             class="text-gray-400 hover:text-emerald-400 transition-colors">
-            GitHub
+             class="inline-flex items-center gap-2 text-sm text-gray-300 hover:text-emerald-300 border border-emerald-500/30 hover:border-emerald-400/60 rounded-full px-3 py-1 transition-colors">
+            <span>🐙</span>
+            <span>GitHub</span>
+          </a>
+          <a href="https://peek.codywilliamson.com" 
+             class="inline-flex items-center gap-2 text-sm text-gray-300 hover:text-emerald-300 border border-emerald-500/30 hover:border-emerald-400/60 rounded-full px-3 py-1 transition-colors">
+            <span>🔗</span>
+            <span>peek.codywilliamson.com</span>
+          </a>
+          <a href="https://codywilliamson.com" 
+             class="inline-flex items-center gap-2 text-sm text-gray-300 hover:text-emerald-300 border border-emerald-500/30 hover:border-emerald-400/60 rounded-full px-3 py-1 transition-colors">
+            <span>🌐</span>
+            <span>codywilliamson.com</span>
+          </a>
+          <a href="https://spectaclesoftware.com" 
+             class="inline-flex items-center gap-2 text-sm text-gray-300 hover:text-emerald-300 border border-emerald-500/30 hover:border-emerald-400/60 rounded-full px-3 py-1 transition-colors">
+            <span>🕶️</span>
+            <span>Spectacle Software</span>
           </a>
         </div>
       </div>
