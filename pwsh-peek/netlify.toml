@@ -3,7 +3,8 @@
   command = "pnpm run build"
 
 [build.environment]
-  NODE_VERSION = "18"
+  # Match package.json engines to avoid plugin hash errors in Node 18
+  NODE_VERSION = "20.19.0"
   PNPM_VERSION = "8.6.0"
 
 [[redirects]]
