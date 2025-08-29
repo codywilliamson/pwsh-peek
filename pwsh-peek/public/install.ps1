@@ -36,7 +36,7 @@ Write-Host "📁 Creating module directory: $ModuleInstallPath" -ForegroundColor
 New-Item -ItemType Directory -Path $ModuleInstallPath -Force | Out-Null
 
 # Download module files
-$BaseUrl = "https://raw.githubusercontent.com/$GitHubRepo/main/Settings/$ModuleFolder"
+$BaseUrl = "https://raw.githubusercontent.com/$GitHubRepo/master/"
 $Files = @(
     "DirectoryListing.psd1",
     "DirectoryListing.psm1",
