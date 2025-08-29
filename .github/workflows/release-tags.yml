@@ -1,0 +1,124 @@
+name: Auto tag releases (module & website)
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    name: Create version tags if missing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # need tags/history for checks
+
+      - name: Set up Node (for reading package.json)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.19.0'
+
+      - name: Read versions
+        id: versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Module version from DirectoryListing.psd1 (parse between single quotes)
+          if [[ -f "DirectoryListing.psd1" ]]; then
+            MODULE_VERSION=$(grep -E "^\s*ModuleVersion\s*=\s*'" DirectoryListing.psd1 | sed -E "s/.*'([^']+)'.*/\1/")
+          else
+            MODULE_VERSION=""
+          fi
+          # Website version from package.json
+          if [[ -f "pwsh-peek/package.json" ]]; then
+            WEBSITE_VERSION=$(node -p "require('./pwsh-peek/package.json').version")
+          else
+            WEBSITE_VERSION=""
+          fi
+          echo "module_version=${MODULE_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "website_version=${WEBSITE_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Detected module: ${MODULE_VERSION:-n/a}, website: ${WEBSITE_VERSION:-n/a}"
+
+      - name: Detect changed paths (last commit)
+        id: changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Default false
+          MODULE_CHANGED=false
+          WEBSITE_CHANGED=false
+          # If manual run, allow both
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            MODULE_CHANGED=true
+            WEBSITE_CHANGED=true
+          else
+            # Compare last commit
+            BASE=$(git rev-parse HEAD~1 || echo "")
+            if [[ -n "$BASE" ]]; then
+              CHANGED=$(git diff --name-only "$BASE" HEAD)
+              if echo "$CHANGED" | grep -E "^(DirectoryListing\.psd1|DirectoryListing\.psm1)$" >/dev/null; then
+                MODULE_CHANGED=true
+              fi
+              if echo "$CHANGED" | grep -E "^pwsh-peek/" >/dev/null; then
+                WEBSITE_CHANGED=true
+              fi
+            fi
+          fi
+          echo "module_changed=${MODULE_CHANGED}" >> "$GITHUB_OUTPUT"
+          echo "website_changed=${WEBSITE_CHANGED}" >> "$GITHUB_OUTPUT"
+          echo "Module changed: $MODULE_CHANGED, Website changed: $WEBSITE_CHANGED"
+
+      - name: Configure git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch tags
+        run: git fetch --tags --force
+
+      - name: Tag module version
+        if: ${{ steps.versions.outputs.module_version != '' && (steps.changed.outputs.module_changed == 'true') }}
+        env:
+          TAG_NAME: module-v${{ steps.versions.outputs.module_version }}
+        run: |
+          if git rev-parse -q --verify "refs/tags/${TAG_NAME}" >/dev/null; then
+            echo "Tag ${TAG_NAME} already exists. Skipping."
+          else
+            git tag -a "${TAG_NAME}" -m "Module release ${TAG_NAME}"
+            git push origin "${TAG_NAME}"
+            echo "Pushed tag ${TAG_NAME}"
+          fi
+
+      - name: Tag website version
+        if: ${{ steps.versions.outputs.website_version != '' && (steps.changed.outputs.website_changed == 'true') }}
+        env:
+          TAG_NAME: website-v${{ steps.versions.outputs.website_version }}
+        run: |
+          if git rev-parse -q --verify "refs/tags/${TAG_NAME}" >/dev/null; then
+            echo "Tag ${TAG_NAME} already exists. Skipping."
+          else
+            git tag -a "${TAG_NAME}" -m "Website release ${TAG_NAME}"
+            git push origin "${TAG_NAME}"
+            echo "Pushed tag ${TAG_NAME}"
+          fi
+
+      - name: Create GitHub Release (module)
+        if: ${{ steps.versions.outputs.module_version != '' && (steps.changed.outputs.module_changed == 'true') }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: module-v${{ steps.versions.outputs.module_version }}
+          name: Module v${{ steps.versions.outputs.module_version }}
+          generate_release_notes: true
+
+      - name: Create GitHub Release (website)
+        if: ${{ steps.versions.outputs.website_version != '' && (steps.changed.outputs.website_changed == 'true') }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: website-v${{ steps.versions.outputs.website_version }}
+          name: Website v${{ steps.versions.outputs.website_version }}
+          generate_release_notes: true

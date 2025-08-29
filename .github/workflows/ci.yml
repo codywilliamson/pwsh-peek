@@ -1,0 +1,39 @@
+name: CI
+
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+
+jobs:
+    build-site:
+        name: Build website
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: pwsh-peek
+        steps:
+            - uses: actions/checkout@v4
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: 10.14.0
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "20.19.0"
+                  cache: "pnpm"
+                  cache-dependency-path: pwsh-peek/pnpm-lock.yaml
+            - run: pnpm install --frozen-lockfile
+            - run: pnpm build
+
+    test-module:
+        name: Lint module (basic)
+        runs-on: windows-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Import module and run basic command
+              shell: pwsh
+              run: |
+                  $env:PSModulePath = "$((Get-Location).Path);$env:PSModulePath"
+                  Import-Module ./DirectoryListing.psd1 -Force
+                  Get-DirectoryView | Out-Null
