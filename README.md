@@ -110,6 +110,9 @@ A modern, concise directory listing for PowerShell with a unique alias `peek`.
 -   `peek -Recurse -Depth 2` — descend 2 levels
 -   `Get-DirectoryView -OnlyFiles` — only files
 -   `peek -NoIcons` — ASCII-only icons (alias: `-Ascii`) for environments without emoji support
+-   `peek -Raw` — output plain objects (no table formatting), ideal for piping/automation
+
+Tip: For paging, prefer `Out-Host -Paging` over `more` to avoid Unicode issues.
 
 ### Configuration
 

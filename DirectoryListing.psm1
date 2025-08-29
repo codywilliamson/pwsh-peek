@@ -8,11 +8,12 @@ function Convert-ToHumanSize {
     $sizes = @('KB', 'MB', 'GB', 'TB', 'PB')
     $val = [double]$Bytes
     $i = 0
-    while ($val -ge 1024 -and $i -lt $sizes.Count - 1) {
+    while ($val -ge 1024 -and $i -lt $sizes.Count) {
         $val = $val / 1024
         $i++
     }
-    '{0:N1} {1}' -f $val, $sizes[$i]
+    # After N divisions, the unit is sizes[N-1]
+    '{0:N1} {1}' -f $val, $sizes[$i - 1]
 }
 
 function Convert-ToRelativeTime {
@@ -94,7 +95,8 @@ function Get-DirectoryView {
         [switch]$OnlyFiles,
         [switch]$OnlyDirs,
         [Alias('Ascii')]
-        [switch]$NoIcons
+        [switch]$NoIcons,
+        [switch]$Raw
     )
 
     # If caller didn't specify -NoIcons, honor environment or config preference
@@ -163,11 +165,14 @@ function Get-DirectoryView {
     }
 
     if ($Long) {
-        $out | Select-Object Icon, Name, Type, Size, Modified, Mode, FullName | Format-Table -AutoSize
+        $selected = $out | Select-Object Icon, Name, Type, Size, Modified, Mode, FullName
     }
     else {
-        $out | Select-Object Icon, Name, Type, Size, Modified | Format-Table -AutoSize
+        $selected = $out | Select-Object Icon, Name, Type, Size, Modified
     }
+
+    if ($Raw) { return $selected }
+    $selected | Format-Table -AutoSize
 }
 
 # Convenience wrappers (approved verb names) and user-friendly aliases
@@ -179,9 +184,10 @@ function Get-PeekAll {
         [switch]$DirsFirst,
         [switch]$Long,
         [Alias('Ascii')]
-        [switch]$NoIcons
+        [switch]$NoIcons,
+        [switch]$Raw
     )
-    Get-DirectoryView -Path $Path -All -DirsFirst:$DirsFirst -Long:$Long -NoIcons:$NoIcons
+    Get-DirectoryView -Path $Path -All -DirsFirst:$DirsFirst -Long:$Long -NoIcons:$NoIcons -Raw:$Raw
 }
 
 function Get-PeekAllRecurse {
@@ -192,9 +198,10 @@ function Get-PeekAllRecurse {
         [switch]$DirsFirst,
         [switch]$Long,
         [Alias('Ascii')]
-        [switch]$NoIcons
+        [switch]$NoIcons,
+        [switch]$Raw
     )
-    Get-DirectoryView -Path $Path -All -Recurse -Depth $Depth -DirsFirst:$DirsFirst -Long:$Long -NoIcons:$NoIcons
+    Get-DirectoryView -Path $Path -All -Recurse -Depth $Depth -DirsFirst:$DirsFirst -Long:$Long -NoIcons:$NoIcons -Raw:$Raw
 }
 
 function Get-PeekFiles {
@@ -207,9 +214,10 @@ function Get-PeekFiles {
         [switch]$SortNewest,
         [switch]$SortSize,
         [Alias('Ascii')]
-        [switch]$NoIcons
+        [switch]$NoIcons,
+        [switch]$Raw
     )
-    Get-DirectoryView -Path $Path -OnlyFiles -All:$All -DirsFirst:$DirsFirst -Long:$Long -SortNewest:$SortNewest -SortSize:$SortSize -NoIcons:$NoIcons
+    Get-DirectoryView -Path $Path -OnlyFiles -All:$All -DirsFirst:$DirsFirst -Long:$Long -SortNewest:$SortNewest -SortSize:$SortSize -NoIcons:$NoIcons -Raw:$Raw
 }
 
 function Get-PeekDirs {
@@ -222,9 +230,10 @@ function Get-PeekDirs {
         [switch]$SortNewest,
         [switch]$SortSize,
         [Alias('Ascii')]
-        [switch]$NoIcons
+        [switch]$NoIcons,
+        [switch]$Raw
     )
-    Get-DirectoryView -Path $Path -OnlyDirs -All:$All -DirsFirst:$DirsFirst -Long:$Long -SortNewest:$SortNewest -SortSize:$SortSize -NoIcons:$NoIcons
+    Get-DirectoryView -Path $Path -OnlyDirs -All:$All -DirsFirst:$DirsFirst -Long:$Long -SortNewest:$SortNewest -SortSize:$SortSize -NoIcons:$NoIcons -Raw:$Raw
 }
 
 function Get-PeekAllSize {
@@ -234,9 +243,10 @@ function Get-PeekAllSize {
         [switch]$DirsFirst,
         [switch]$Long,
         [Alias('Ascii')]
-        [switch]$NoIcons
+        [switch]$NoIcons,
+        [switch]$Raw
     )
-    Get-DirectoryView -Path $Path -All -SortSize -DirsFirst:$DirsFirst -Long:$Long -NoIcons:$NoIcons
+    Get-DirectoryView -Path $Path -All -SortSize -DirsFirst:$DirsFirst -Long:$Long -NoIcons:$NoIcons -Raw:$Raw
 }
 
 function Get-PeekAllNewest {
@@ -246,9 +256,10 @@ function Get-PeekAllNewest {
         [switch]$DirsFirst,
         [switch]$Long,
         [Alias('Ascii')]
-        [switch]$NoIcons
+        [switch]$NoIcons,
+        [switch]$Raw
     )
-    Get-DirectoryView -Path $Path -All -SortNewest -DirsFirst:$DirsFirst -Long:$Long -NoIcons:$NoIcons
+    Get-DirectoryView -Path $Path -All -SortNewest -DirsFirst:$DirsFirst -Long:$Long -NoIcons:$NoIcons -Raw:$Raw
 }
 
 # Aliases (readable plus short forms)
@@ -341,4 +352,4 @@ function Set-NoIconsForPeek {
     }
 }
 
-Export-ModuleMember -Function Get-PeekPreference, Set-NoIconsForPeek -Alias
+Export-ModuleMember -Function Get-PeekPreference, Set-NoIconsForPeek
