@@ -3,8 +3,8 @@
     <HeroSection :terminal-sessions="terminalSessions" @copy-install="copyInstallCommand" />
     <FeaturesSection :features="features" />
     <ExamplesSection :flags="flags" />
-    <CommandsSection :commands="commands" />
-    <AliasesSection :aliases="aliases" />
+  <CommandsSection :commands="commands" />
+  <TipsSection />
     <InstallSection />
 
     <Transition name="toast">
@@ -23,7 +23,7 @@ import HeroSection from '@/sections/HeroSection.vue'
 import FeaturesSection from '@/sections/FeaturesSection.vue'
 import ExamplesSection from '@/sections/ExamplesSection.vue'
 import CommandsSection from '@/sections/CommandsSection.vue'
-import AliasesSection from '@/sections/AliasesSection.vue'
+import TipsSection from '@/sections/TipsSection.vue'
 import InstallSection from '@/sections/InstallSection.vue'
 
 const showToast = ref(false)
@@ -107,15 +107,7 @@ const commands = [
   }
 ]
 
-const aliases = [
-  { alias: 'peek', command: 'Get-DirectoryView' },
-  { alias: 'pka', command: 'peek-all' },
-  { alias: 'pkar', command: 'peek-all-recurse' },
-  { alias: 'pkf', command: 'peek-files' },
-  { alias: 'pkd', command: 'peek-dirs' },
-  { alias: 'pkas', command: 'peek-all-size' },
-  { alias: 'pkan', command: 'peek-all-newest' },
-]
+// Aliases are displayed inline in the Commands section; dedicated list removed.
 
 // Terminal sessions built from user's captured output
 const terminalSessions = [

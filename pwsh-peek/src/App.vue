@@ -1,24 +1,16 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import DefaultLayout from '@/layouts/DefaultLayout.vue'
 </script>
 
 <template>
-  <div id="app" class="min-h-screen bg-slate-950 text-white gradient-animated overflow-x-hidden">
-    <!-- Keep layout here in case future routes want their own; HomeView already uses DefaultLayout internally. -->
+  <div id="app" class="min-h-screen bg-slate-950 text-white gradient-animated">
     <RouterView />
   </div>
- </template>
+</template>
 
 <style>
 html {
   scroll-behavior: smooth;
-}
-
-/* Prevent horizontal scroll on mobile */
-html, body, #app {
-  overflow-x: hidden;
-  width: 100%;
 }
 
 /* Custom glowing animations */

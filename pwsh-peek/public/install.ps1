@@ -12,7 +12,7 @@ $ErrorActionPreference = "Stop"
 
 # Module information
 $ModuleName = "DirectoryListing"
-$GitHubRepo = "codywilliamson/pwsh-profile-personal"
+$GitHubRepo = "codywilliamson/pwsh-peek"
 $ModuleFolder = "modules/DirectoryListing"
 
 Write-Host "🔧 Installing peek PowerShell Module..." -ForegroundColor Cyan
