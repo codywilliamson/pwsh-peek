@@ -1,3 +1,70 @@
+# peek — Modern PowerShell directory listings (monorepo)
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/bc85d29e-a297-4f04-a94f-ba0f1b89c3db/deploy-status)](https://app.netlify.com/projects/pwsh-peek/deploys)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Built with Vite](https://img.shields.io/badge/Built%20with-Vite-646CFF.svg)](https://vite.dev)
+[![Vue 3](https://img.shields.io/badge/Vue-3-42b883.svg)](https://vuejs.org)
+[![PowerShell](https://img.shields.io/badge/PowerShell-Module-5391FE.svg)](https://learn.microsoft.com/powershell/)
+
+Blazing-fast, human-friendly directory listings for PowerShell with icons, human-readable sizes, relative timestamps, and intuitive aliases.
+
+-   Website: https://peek.codywilliamson.com
+-   Author: https://codywilliamson.com • https://spectaclesoftware.com • cody@spectaclesoftware.com
+
+## Layout
+
+-   `DirectoryListing.psm1` / `DirectoryListing.psd1` — the PowerShell module (exporting `Get-DirectoryView` and related commands)
+-   `pwsh-peek/` — the marketing/docs website (Vue 3 + Vite + Tailwind)
+
+## Features
+
+-   Human-readable sizes (KB/MB/GB)
+-   Relative timestamps (e.g., 5m ago, 2d ago)
+-   Directory-first sorting and smart filters
+-   Short, memorable aliases (pka, pkf, pkd, …)
+-   Zero config; great defaults out of the box
+
+## Quick Install
+
+Run in PowerShell:
+
+```powershell
+iex (irm pwsh.peek.dev/install.ps1)
+```
+
+Custom path / profile:
+
+```powershell
+iex (irm pwsh.peek.dev/install.ps1) -InstallPath "C:\MyModules" -AddToProfile
+```
+
+## Commands
+
+-   `peek` — Base listing. Options: `-All`, `-DirsFirst`, `-Long`, `-SortNewest`, `-SortSize`, `-Recurse`, `-Depth`
+-   `peek-all` (alias: `pka`) — Include hidden/system items
+-   `peek-all-recurse` (alias: `pkar`) — Recurse with `-Depth`
+-   `peek-files` (alias: `pkf`) — Files only; supports `-SortSize`, `-SortNewest`
+-   `peek-dirs` (alias: `pkd`) — Directories only
+-   `peek-all-size` (alias: `pkas`) — All items, sorted by size
+-   `peek-all-newest` (alias: `pkan`) — All items, newest first
+
+## Develop the website
+
+```pwsh
+cd pwsh-peek
+pnpm install
+pnpm dev   # run locally
+pnpm build # production build
+```
+
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, coding standards, and how to propose changes.
+
+## License
+
+MIT © Cody Williamson — see [LICENSE](LICENSE)
+
 # DirectoryListing module
 
 A modern, concise directory listing for PowerShell with a unique alias `peek`.

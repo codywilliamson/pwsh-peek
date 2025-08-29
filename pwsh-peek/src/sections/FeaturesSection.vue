@@ -14,7 +14,7 @@
         <div v-for="(feature, index) in features" :key="index"
              class="section-glow rounded-xl p-6 transform hover:scale-105 transition-all duration-300"
              :style="{ animationDelay: index * 0.1 + 's' }">
-          <div class="text-4xl mb-4">{{ feature.icon }}</div>
+          <div class="text-4xl mb-4 emoji">{{ feature.icon }}</div>
           <h3 class="text-xl font-semibold mb-3 text-emerald-400">{{ feature.title }}</h3>
           <p class="text-gray-300 leading-relaxed">{{ feature.description }}</p>
         </div>

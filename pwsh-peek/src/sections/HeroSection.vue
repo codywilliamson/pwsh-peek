@@ -39,7 +39,7 @@
                   </svg>
                 </button>
               </div>
-              <code class="text-emerald-400 font-mono text-xs sm:text-sm md:text-base whitespace-pre">iex (irm peek.pwsh.dev/install.ps1)</code>
+              <code class="text-emerald-400 font-mono text-xs sm:text-sm md:text-base whitespace-pre">iex (irm peek.codywilliamson.com/install.ps1)</code>
             </div>
           </div>
 

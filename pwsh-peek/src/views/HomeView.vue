@@ -5,6 +5,7 @@
     <ExamplesSection :flags="flags" />
   <CommandsSection :commands="commands" />
   <TipsSection />
+  <ComingSoonSection />
     <InstallSection />
 
     <Transition name="toast">
@@ -24,6 +25,7 @@ import FeaturesSection from '@/sections/FeaturesSection.vue'
 import ExamplesSection from '@/sections/ExamplesSection.vue'
 import CommandsSection from '@/sections/CommandsSection.vue'
 import TipsSection from '@/sections/TipsSection.vue'
+import ComingSoonSection from '@/sections/ComingSoonSection.vue'
 import InstallSection from '@/sections/InstallSection.vue'
 
 const showToast = ref(false)
@@ -36,7 +38,7 @@ const features = [
     description: 'Optimized PowerShell cmdlets that respond instantly, even in large directories.'
   },
   {
-    icon: '📊',
+  icon: '�',
     title: 'Human Readable',
     description: 'File sizes in KB/MB/GB and relative timestamps like "5m ago" or "2d ago".'
   },
@@ -51,7 +53,7 @@ const features = [
     description: 'Short, memorable commands like "peek-all", "peek-files", or just "pka".'
   },
   {
-    icon: '🌈',
+  icon: '�',
     title: 'Rich Display',
     description: 'Colorized output with file type icons and clean, organized formatting.'
   },
@@ -188,14 +190,14 @@ const flags = [
 
 const copyInstallCommand = async () => {
   try {
-    await navigator.clipboard.writeText('iex (irm peek.pwsh.dev/install.ps1)')
+  await navigator.clipboard.writeText('iex (irm pwsh.peek.dev/install.ps1)')
     toastMessage.value = 'Install command copied to clipboard!'
     showToast.value = true
     setTimeout(() => {
       showToast.value = false
     }, 3000)
   } catch (err) {
-    toastMessage.value = 'Please copy manually: iex (irm peek.pwsh.dev/install.ps1)'
+  toastMessage.value = 'Please copy manually: iex (irm pwsh.peek.dev/install.ps1)'
     showToast.value = true
     setTimeout(() => {
       showToast.value = false

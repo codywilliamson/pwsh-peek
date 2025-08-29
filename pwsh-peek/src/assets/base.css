@@ -71,6 +71,9 @@ body {
     -apple-system,
     BlinkMacSystemFont,
     'Segoe UI',
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Noto Color Emoji',
     Roboto,
     Oxygen,
     Ubuntu,
@@ -83,4 +86,15 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure emoji render with color fonts across platforms */
+.emoji {
+  font-family:
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Noto Color Emoji',
+    Inter,
+    'Segoe UI',
+    sans-serif;
 }

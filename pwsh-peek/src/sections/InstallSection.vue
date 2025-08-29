@@ -12,7 +12,7 @@
         <div class="section-glow rounded-xl p-6 sm:p-8 glow-emerald">
           <h3 class="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-emerald-400">⚡ Quick Install</h3>
           <div class="bg-slate-900/50 rounded-lg p-3 sm:p-4 mb-4 overflow-x-auto">
-            <code class="text-emerald-400 font-mono text-xs sm:text-lg whitespace-pre">iex (irm peek.pwsh.dev/install.ps1)</code>
+            <code class="text-emerald-400 font-mono text-xs sm:text-lg whitespace-pre">iex (irm peek.codywilliamson.com/install.ps1)</code>
           </div>
           <p class="text-gray-300">Installs to your PowerShell modules directory and imports automatically</p>
         </div>
@@ -20,7 +20,7 @@
         <div class="section-glow rounded-xl p-6 sm:p-8">
           <h3 class="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-blue-400">🔧 Custom Install</h3>
           <div class="bg-slate-900/50 rounded-lg p-3 sm:p-4 mb-4 overflow-x-auto">
-            <code class="text-blue-400 font-mono text-[11px] sm:text-sm whitespace-pre">iex (irm peek.pwsh.dev/install.ps1) -InstallPath "C:\MyModules" -AddToProfile</code>
+            <code class="text-blue-400 font-mono text-[11px] sm:text-sm whitespace-pre">iex (irm peek.codywilliamson.com/install.ps1) -InstallPath "C:\MyModules" -AddToProfile</code>
           </div>
           <p class="text-gray-300">Install to a custom location and automatically add to your PowerShell profile</p>
         </div>

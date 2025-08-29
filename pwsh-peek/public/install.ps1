@@ -1,7 +1,7 @@
 # peek PowerShell Module Installer
 <#
 Downloads and installs the DirectoryListing (peek) module from this repository's root.
-Designed to be fetched via: iex (irm https://pwsh-peek.netlify.app/install.ps1)
+Designed to be fetched via: iex (irm https://pwsh.peek.dev/install.ps1)
 This script assumes the module files (psd1, psm1) live in the repo root (not nested paths).
 #>
 
@@ -24,9 +24,10 @@ Write-Host ""
 
 # Ensure TLS 1.2+ for GitHub
 try {
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
-}
-catch { }
+    $proto = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+    try { $proto = $proto -bor [Net.SecurityProtocolType]::Tls13 } catch { }
+    [Net.ServicePointManager]::SecurityProtocol = $proto
+} catch { }
 
 # Create module directory
 $ModuleInstallPath = Join-Path $InstallPath $ModuleName
@@ -60,7 +61,7 @@ foreach ($File in $Files) {
     $Destination = Join-Path $ModuleInstallPath $File
     try {
         Write-Host "   📄 $File" -ForegroundColor Gray
-        Invoke-WebRequest -Uri $Url -OutFile $Destination -UseBasicParsing -ErrorAction Stop
+    Invoke-WebRequest -Uri $Url -OutFile $Destination -ErrorAction Stop
     }
     catch {
         Write-Host "❌ Failed to download $File from $Url" -ForegroundColor Red
@@ -69,7 +70,7 @@ foreach ($File in $Files) {
             Write-Host "   Retrying against 'main' branch..." -ForegroundColor Yellow
             try {
                 $fallbackUrl = "https://raw.githubusercontent.com/$GitHubRepo/main/$File"
-                Invoke-WebRequest -Uri $fallbackUrl -OutFile $Destination -UseBasicParsing -ErrorAction Stop
+        Invoke-WebRequest -Uri $fallbackUrl -OutFile $Destination -ErrorAction Stop
                 Write-Host "   ✅ Fallback succeeded for $File" -ForegroundColor Green
             }
             catch {
@@ -142,7 +143,7 @@ Write-Host "  peek-dirs         # Show only directories" -ForegroundColor Cyan
 Write-Host "  pka               # Short alias for peek-all" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "For full documentation, visit:" -ForegroundColor White
-Write-Host "  https://pwsh-peek.netlify.app" -ForegroundColor Blue
+Write-Host "  https://pwsh.peek.dev" -ForegroundColor Blue
 Write-Host ""
 
 # Show a quick demo

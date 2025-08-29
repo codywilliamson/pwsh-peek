@@ -51,13 +51,6 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Custom domain (if you have one)
-# [[redirects]]
-#   from = "https://peek-powershell.netlify.app/*"
-#   to = "https://pwsh-peek.netlify.app/:splat"
-#   status = 301
-#   force = true
-
 # Functions (if needed in the future)
 [functions]
   directory = "netlify/functions"
