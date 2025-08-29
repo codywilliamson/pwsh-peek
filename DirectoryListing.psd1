@@ -2,9 +2,9 @@
     RootModule        = '.\DirectoryListing.psm1'
     ModuleVersion     = '1.0.0'
     GUID              = '7f3f0a1e-7aef-4b44-9e8c-9e61e5b7e6b1'
-    Author            = 'Cody Williamson'
-    CompanyName       = 'Personal'
-    Copyright         = '(c) Cody Williamson'
+    Author            = 'Cody Williamson (cody@spectaclesoftware.com)'
+    CompanyName       = 'Spectacle Software'
+    Copyright         = '(c) Cody Williamson 2025'
     Description       = 'Modern, concise directory listing with human sizes and relative times; provides alias `peek`.'
     PowerShellVersion = '5.1'
     FunctionsToExport = @(
