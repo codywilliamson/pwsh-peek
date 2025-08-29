@@ -190,14 +190,14 @@ const flags = [
 
 const copyInstallCommand = async () => {
   try {
-  await navigator.clipboard.writeText('iex (irm pwsh.peek.dev/install.ps1)')
+  await navigator.clipboard.writeText('iex (irm peek.codywilliamson.com/install.ps1)')
     toastMessage.value = 'Install command copied to clipboard!'
     showToast.value = true
     setTimeout(() => {
       showToast.value = false
     }, 3000)
   } catch (err) {
-  toastMessage.value = 'Please copy manually: iex (irm pwsh.peek.dev/install.ps1)'
+  toastMessage.value = 'Please copy manually: iex (irm peek.codywilliamson.com/install.ps1)'
     showToast.value = true
     setTimeout(() => {
       showToast.value = false

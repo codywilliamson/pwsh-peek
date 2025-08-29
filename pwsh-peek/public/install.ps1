@@ -1,7 +1,7 @@
 # peek PowerShell Module Installer
 <#
 Downloads and installs the DirectoryListing (peek) module from this repository's root.
-Designed to be fetched via: iex (irm https://pwsh.peek.dev/install.ps1)
+Designed to be fetched via: iex (irm https://peek.codywilliamson.com/install.ps1)
 This script assumes the module files (psd1, psm1) live in the repo root (not nested paths).
 #>
 
@@ -27,7 +27,8 @@ try {
     $proto = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
     try { $proto = $proto -bor [Net.SecurityProtocolType]::Tls13 } catch { }
     [Net.ServicePointManager]::SecurityProtocol = $proto
-} catch { }
+}
+catch { }
 
 # Create module directory
 $ModuleInstallPath = Join-Path $InstallPath $ModuleName
@@ -61,7 +62,7 @@ foreach ($File in $Files) {
     $Destination = Join-Path $ModuleInstallPath $File
     try {
         Write-Host "   📄 $File" -ForegroundColor Gray
-    Invoke-WebRequest -Uri $Url -OutFile $Destination -ErrorAction Stop
+        Invoke-WebRequest -Uri $Url -OutFile $Destination -ErrorAction Stop
     }
     catch {
         Write-Host "❌ Failed to download $File from $Url" -ForegroundColor Red
@@ -70,7 +71,7 @@ foreach ($File in $Files) {
             Write-Host "   Retrying against 'main' branch..." -ForegroundColor Yellow
             try {
                 $fallbackUrl = "https://raw.githubusercontent.com/$GitHubRepo/main/$File"
-        Invoke-WebRequest -Uri $fallbackUrl -OutFile $Destination -ErrorAction Stop
+                Invoke-WebRequest -Uri $fallbackUrl -OutFile $Destination -ErrorAction Stop
                 Write-Host "   ✅ Fallback succeeded for $File" -ForegroundColor Green
             }
             catch {
