@@ -1,6 +1,9 @@
 # peek — Modern PowerShell directory listings (monorepo)
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/bc85d29e-a297-4f04-a94f-ba0f1b89c3db/deploy-status)](https://app.netlify.com/projects/pwsh-peek/deploys)
+[![CI](https://github.com/codywilliamson/pwsh-peek/actions/workflows/ci.yml/badge.svg)](https://github.com/codywilliamson/pwsh-peek/actions/workflows/ci.yml)
+[![Module Version](https://img.shields.io/badge/Module-v1.0.0-5391FE.svg)](#)
+[![Website Version](https://img.shields.io/badge/Website-v0.9.1-646CFF.svg)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Built with Vite](https://img.shields.io/badge/Built%20with-Vite-646CFF.svg)](https://vite.dev)
 [![Vue 3](https://img.shields.io/badge/Vue-3-42b883.svg)](https://vuejs.org)
