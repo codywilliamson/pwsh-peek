@@ -12,14 +12,14 @@
 
       <div class="grid lg:grid-cols-2 gap-8">
         <div class="space-y-6">
-          <div class="section-glow rounded-xl p-6">
+          <div class="section-glow rounded-xl p-6 overflow-hidden">
             <h3 class="text-lg font-semibold mb-4 text-red-400">❌ The old way</h3>
             <pre class="w-full max-w-full text-xs sm:text-sm text-gray-300 bg-slate-900/50 rounded-lg p-3 sm:p-4 overflow-x-auto"><code>PS> Get-ChildItem -Force | Sort-Object PSIsContainer,Name
 PS> Get-ChildItem -File | Sort-Object Length -Descending
 PS> Get-ChildItem -Directory -Recurse -Depth 2</code></pre>
           </div>
 
-          <div class="section-glow rounded-xl p-6 glow-emerald">
+          <div class="section-glow rounded-xl p-6 glow-emerald overflow-hidden">
             <h3 class="text-lg font-semibold mb-4 text-emerald-400">✅ The peek way</h3>
             <pre class="w-full max-w-full text-xs sm:text-sm text-emerald-300 bg-slate-900/50 rounded-lg p-3 sm:p-4 overflow-x-auto"><code>PS> peek-all
 PS> peek-files -SortSize  
@@ -27,7 +27,7 @@ PS> peek-dirs -Recurse -Depth 2</code></pre>
           </div>
         </div>
 
-  <div class="section-glow rounded-xl p-6">
+  <div class="section-glow rounded-xl p-4 sm:p-6">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-semibold text-emerald-400">Flags & Sorting</h3>
             <span class="text-xs text-gray-400">works across peek commands</span>
