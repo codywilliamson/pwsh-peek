@@ -16,10 +16,10 @@
           </div>
           <p class="text-gray-300 text-sm mb-3">{{ cmd.description }}</p>
           <div v-if="cmd.options?.length" class="mb-2 flex flex-wrap gap-1">
-            <span v-for="opt in cmd.options" :key="opt" class="inline-block px-2 py-0.5 text-[10px] rounded bg-slate-900/50 border border-emerald-500/20 text-emerald-300 font-mono">{{ opt }}</span>
+            <span v-for="opt in cmd.options" :key="opt" class="inline-block px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] rounded bg-slate-900/50 border border-emerald-500/20 text-emerald-300 font-mono">{{ opt }}</span>
           </div>
-          <div v-if="cmd.example" class="bg-slate-900/50 rounded p-2">
-            <code class="text-[12px] text-blue-300 font-mono">{{ cmd.example }}</code>
+          <div v-if="cmd.example" class="bg-slate-900/50 rounded p-2 overflow-x-auto">
+            <code class="text-[11px] sm:text-[12px] text-blue-300 font-mono whitespace-pre">{{ cmd.example }}</code>
           </div>
         </div>
       </div>

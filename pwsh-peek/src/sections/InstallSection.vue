@@ -9,28 +9,28 @@
       </p>
 
       <div class="space-y-8">
-        <div class="section-glow rounded-xl p-8 glow-emerald">
+        <div class="section-glow rounded-xl p-6 sm:p-8 glow-emerald">
           <h3 class="text-2xl font-semibold mb-4 text-emerald-400">⚡ Quick Install</h3>
-          <div class="bg-slate-900/50 rounded-lg p-4 mb-4">
-            <code class="text-emerald-400 font-mono text-lg">iex (irm peek.pwsh.dev/install.ps1)</code>
+          <div class="bg-slate-900/50 rounded-lg p-3 sm:p-4 mb-4 overflow-x-auto">
+            <code class="text-emerald-400 font-mono text-sm sm:text-lg whitespace-pre">iex (irm peek.pwsh.dev/install.ps1)</code>
           </div>
           <p class="text-gray-300">Installs to your PowerShell modules directory and imports automatically</p>
         </div>
 
-        <div class="section-glow rounded-xl p-8">
+        <div class="section-glow rounded-xl p-6 sm:p-8">
           <h3 class="text-2xl font-semibold mb-4 text-blue-400">🔧 Custom Install</h3>
-          <div class="bg-slate-900/50 rounded-lg p-4 mb-4">
-            <code class="text-blue-400 font-mono text-sm">iex (irm peek.pwsh.dev/install.ps1) -InstallPath "C:\MyModules" -AddToProfile</code>
+          <div class="bg-slate-900/50 rounded-lg p-3 sm:p-4 mb-4 overflow-x-auto">
+            <code class="text-blue-400 font-mono text-xs sm:text-sm whitespace-pre">iex (irm peek.pwsh.dev/install.ps1) -InstallPath "C:\MyModules" -AddToProfile</code>
           </div>
           <p class="text-gray-300">Install to a custom location and automatically add to your PowerShell profile</p>
         </div>
 
-        <div class="section-glow rounded-xl p-8">
+        <div class="section-glow rounded-xl p-6 sm:p-8">
           <h3 class="text-2xl font-semibold mb-4 text-purple-400">📦 Manual Install</h3>
           <div class="space-y-2 text-left">
             <p class="text-gray-300">1. Download the module files:</p>
-            <div class="bg-slate-900/50 rounded-lg p-3 mb-2">
-              <code class="text-purple-400 font-mono text-sm">git clone https://github.com/codywilliamson/pwsh-peek.git</code>
+            <div class="bg-slate-900/50 rounded-lg p-2 sm:p-3 mb-2 overflow-x-auto">
+              <code class="text-purple-400 font-mono text-xs sm:text-sm whitespace-pre">git clone https://github.com/codywilliamson/pwsh-peek.git</code>
             </div>
             <p class="text-gray-300">2. Copy to PowerShell modules directory</p>
             <p class="text-gray-300">3. Import with <code class="text-purple-400">Import-Module DirectoryListing</code></p>

@@ -25,7 +25,7 @@
               <button @click="$emit('copy-install')" class="px-7 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-lg font-semibold text-lg transition-all duration-300 glow-emerald hover:scale-105">Quick Install</button>
               <a href="#features" class="px-7 py-3 border-2 border-emerald-500/50 hover:border-emerald-500 rounded-lg font-semibold text-lg transition-all duration-300 hover:bg-emerald-500/10">Learn More</a>
             </div>
-            <div class="section-glow rounded-xl p-4 max-w-xl lg:max-w-2xl">
+            <div class="section-glow rounded-xl p-4 max-w-xl lg:max-w-2xl overflow-x-auto">
               <div class="flex items-center justify-between mb-2">
                 <div class="flex items-center space-x-2">
                   <div class="w-3 h-3 bg-red-500 rounded-full"></div>
@@ -39,7 +39,7 @@
                   </svg>
                 </button>
               </div>
-              <code class="text-emerald-400 font-mono text-sm md:text-base">iex (irm peek.pwsh.dev/install.ps1)</code>
+              <code class="text-emerald-400 font-mono text-xs sm:text-sm md:text-base whitespace-pre">iex (irm peek.pwsh.dev/install.ps1)</code>
             </div>
           </div>
 

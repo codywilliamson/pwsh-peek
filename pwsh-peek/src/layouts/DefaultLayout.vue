@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen overflow-hidden">
+  <div class="min-h-screen overflow-x-hidden">
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 bg-slate-950/80 backdrop-blur-md border-b border-emerald-500/20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
