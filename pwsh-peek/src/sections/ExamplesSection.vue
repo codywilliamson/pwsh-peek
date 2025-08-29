@@ -1,0 +1,54 @@
+<template>
+  <section class="py-20 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+          Simple & Powerful
+        </h2>
+        <p class="text-xl text-gray-300">
+          Intuitive commands that just work
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8">
+        <div class="space-y-6">
+          <div class="section-glow rounded-xl p-6">
+            <h3 class="text-lg font-semibold mb-4 text-red-400">❌ The old way</h3>
+            <pre class="text-sm text-gray-300 bg-slate-900/50 rounded-lg p-4 overflow-x-auto"><code>PS> Get-ChildItem -Force | Sort-Object PSIsContainer,Name
+PS> Get-ChildItem -File | Sort-Object Length -Descending
+PS> Get-ChildItem -Directory -Recurse -Depth 2</code></pre>
+          </div>
+
+          <div class="section-glow rounded-xl p-6 glow-emerald">
+            <h3 class="text-lg font-semibold mb-4 text-emerald-400">✅ The peek way</h3>
+            <pre class="text-sm text-emerald-300 bg-slate-900/50 rounded-lg p-4 overflow-x-auto"><code>PS> peek-all
+PS> peek-files -SortSize  
+PS> peek-dirs -Recurse -Depth 2</code></pre>
+          </div>
+        </div>
+
+        <div class="section-glow rounded-xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-emerald-400">Flags & Sorting</h3>
+            <span class="text-xs text-gray-400">works across peek commands</span>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div v-for="flag in flags" :key="flag.name" class="rounded-lg border border-emerald-500/20 bg-slate-900/40 p-3">
+              <div class="mb-1">
+                <span class="inline-block px-2 py-0.5 text-xs rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-mono">{{ flag.name }}</span>
+              </div>
+              <p class="text-sm text-gray-300">{{ flag.desc }}</p>
+            </div>
+          </div>
+          <div class="mt-4 text-xs text-gray-400">
+            Tip: combine flags, e.g. <code class="text-emerald-300 font-mono">pkf -SortSize -All</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+const props = defineProps<{ flags: Array<{ name: string; desc: string }> }>()
+</script>

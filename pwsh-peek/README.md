@@ -1,33 +1,85 @@
-# pwsh-peek
+````markdown
+# peek — Modern PowerShell directory listings
 
-This template should help get you started developing with Vue 3 in Vite.
+Blazing-fast, human-friendly directory listings for PowerShell with icons, human-readable sizes, relative timestamps, and intuitive aliases.
 
-## Recommended IDE Setup
+Website: https://peek.pwsh.dev
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Features
 
-## Type Support for `.vue` Imports in TS
+-   Human-readable sizes (KB/MB/GB)
+-   Relative timestamps (e.g., 5m ago, 2d ago)
+-   Directory-first sorting and smart filters
+-   Short, memorable aliases (pka, pkf, pkd, …)
+-   Zero config; great defaults out of the box
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Quick Install
 
-## Customize configuration
+Run in PowerShell:
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+```powershell
+iex (irm peek.pwsh.dev/install.ps1)
+```
+````
 
-## Project Setup
+This installs the module to your PowerShell modules directory and imports it.
 
-```sh
+### Custom Install
+
+```powershell
+iex (irm peek.pwsh.dev/install.ps1) -InstallPath "C:\MyModules" -AddToProfile
+```
+
+## Commands
+
+-   peek — Base listing. Options: -All, -DirsFirst, -Long, -SortNewest, -SortSize, -Recurse, -Depth
+-   peek-all (alias: pka) — Include hidden/system items
+-   peek-all-recurse (alias: pkar) — Recurse with -Depth
+-   peek-files (alias: pkf) — Files only; supports -SortSize, -SortNewest
+-   peek-dirs (alias: pkd) — Directories only
+-   peek-all-size (alias: pkas) — All items, sorted by size
+-   peek-all-newest (alias: pkan) — All items, newest first
+
+## Aliases
+
+-   peek → Get-DirectoryView
+-   pka → peek-all
+-   pkar → peek-all-recurse
+-   pkf → peek-files
+-   pkd → peek-dirs
+-   pkas → peek-all-size
+-   pkan → peek-all-newest
+
+## Examples
+
+```powershell
+# See everything, directories first
+pka -DirsFirst
+
+# Biggest files first
+pkf -SortSize
+
+# Recurse with depth limit
+pkar -Depth 2
+
+# Newest items first with long view
+peek -All -SortNewest -Long
+```
+
+## Developing the Website (Vue 3 + Vite + Tailwind)
+
+This repo includes the marketing/docs site in `pwsh-peek/`.
+
+```pwsh
 pnpm install
+pnpm dev   # run the site locally
+pnpm build # production build
 ```
 
-### Compile and Hot-Reload for Development
+## License
 
-```sh
-pnpm dev
+MIT
+
 ```
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-pnpm build
 ```
